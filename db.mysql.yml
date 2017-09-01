@@ -12,8 +12,13 @@ services:
                 --innodb_file_format=barracuda
                 --innodb_file_per_table=On
                 --innodb_large_prefix=On
+    volumes:
+      - data:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: "m@0dl3ing"
       MYSQL_USER: moodle
       MYSQL_PASSWORD: "m@0dl3ing"
       MYSQL_DATABASE: moodle
+volumes:
+  data:
+    driver: "local"
