@@ -5,13 +5,16 @@ services:
       MOODLE_DOCKER_DBTYPE: mysqli
       MOODLE_DOCKER_DBCOLLATION: utf8mb4_bin
   db:
-    image: mysql:5
-    command: >
-                --character-set-server=utf8mb4
-                --collation-server=utf8mb4_bin
-                --innodb_file_format=barracuda
-                --innodb_file_per_table=On
-                --innodb_large_prefix=On
+    # image: mysql:5
+    # command: >
+    #             --character-set-server=utf8mb4
+    #             --collation-server=utf8mb4_bin
+    #             --innodb_file_format=barracuda
+    #             --innodb_file_per_table=On
+    #             --innodb_large_prefix=On
+    build:
+      context: ./dbmysql
+    image: dbmysql_img
     volumes:
       - data:/var/lib/mysql
     environment:
