@@ -1,5 +1,5 @@
-FROM mysql:5
+FROM danpoltawski/moodle-php-apache:7.0
 
 MAINTAINER amit.mondal2016@gmail.com
 
-ADD files/new_moodle_instance.sql files/copy_db /docker-entrypoint-initdb.d/
+RUN docker-php-ext-install mcrypt

@@ -6,6 +6,8 @@ services:
       MOODLE_DOCKER_DBCOLLATION: utf8mb4_bin
   db:
     image: mysql:5
+    volumes:
+       - ./files/new_moodle_instance.sql:/docker-entrypoint-initdb.d/schema.sql:ro
     command: >
                 --character-set-server=utf8mb4
                 --collation-server=utf8mb4_bin
@@ -13,7 +15,7 @@ services:
                 --innodb_file_per_table=On
                 --innodb_large_prefix=On
     environment:
-      MYSQL_ROOT_PASSWORD: "m@0dl3ing"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_USER: moodle
       MYSQL_PASSWORD: "m@0dl3ing"
       MYSQL_DATABASE: moodle
