@@ -5,7 +5,7 @@ export MOODLE_DOCKER_DB=mysql
 docker=`pwd`
 echo $docker
 ln -s $MOODLE_DOCKER_WWWROOT/local/ucla/config/shared_dev_moodle-config.php $MOODLE_DOCKER_WWWROOT/config.php
-cp config.docker-template.php $MOODLE_DOCKER_WWWROOT/config.php
+cp config.docker-template.php $MOODLE_DOCKER_WWWROOT/local/ucla/config/shared_dev_moodle-config.php
 
 cd $MOODLE_DOCKER_WWWROOT
 curl -sS http://getcomposer.org/installer | php

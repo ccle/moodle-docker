@@ -590,8 +590,14 @@ $CFG->dbhost    = 'db';
 $CFG->dbname    = getenv('MOODLE_DOCKER_DBNAME');
 $CFG->dbuser    = getenv('MOODLE_DOCKER_DBUSER');
 $CFG->dbpass    = getenv('MOODLE_DOCKER_DBPASS');
-$CFG->prefix    = 'm_';
-$CFG->dboptions = ['dbcollation' => getenv('MOODLE_DOCKER_DBCOLLATION')];
+// $CFG->prefix    = 'm_';
+$CFG->prefix    = 'mdl_';
+
+//$CFG->dboptions = ['dbcollation' => getenv('MOODLE_DOCKER_DBCOLLATION')];
+$CFG->dboptions['dbpersist'] = 0;
+$CFG->dboptions['dbsocket']  = 1;
+$CFG->dboptions['dbcollation'] = 'utf8mb4_unicode_ci';
+$CFG->dboptions['dbcollation'] = getenv('MOODLE_DOCKER_DBCOLLATION');
 
 //$CFG->wwwroot   = 'http://localhost';
 $CFG->wwwroot = 'http://192.168.99.100';
