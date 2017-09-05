@@ -10,6 +10,9 @@ docker=$(pwd)
 
 # Go to moodle dir and set up composer
 cd $MOODLE_DOCKER_WWWROOT
+
+git submodule update --init --recursive
+
 curl -sS http://getcomposer.org/installer | php
 php composer.phar install
 php composer.phar install -d theme/uclashared
