@@ -39,7 +39,7 @@ then
     dockercompose="${dockercompose} -f ${basedir}/phpunit-external-services.yml"
 fi
 
-export MOODLE_DOCKER_WEB_PORT=${MOODLE_DOCKER_WEB_PORT:-8080}
+export MOODLE_DOCKER_WEB_PORT=${MOODLE_DOCKER_WEB_PORT:-8000}
 if [[ $MOODLE_DOCKER_WEB_PORT -gt 0 ]]
 then
     dockercompose="${dockercompose} -f ${basedir}/webserver.port.yml"
