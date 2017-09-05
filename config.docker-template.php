@@ -1,8 +1,5 @@
-<?php  // Moodle configuration file
-
-unset($CFG);
-global $CFG;
-$CFG = new stdClass();
+<?php
+// Private moodle configuration file
 
 $CFG->dbtype    = getenv('MOODLE_DOCKER_DBTYPE');
 $CFG->dblibrary = 'native';
@@ -10,10 +7,9 @@ $CFG->dbhost    = 'db';
 $CFG->dbname    = getenv('MOODLE_DOCKER_DBNAME');
 $CFG->dbuser    = getenv('MOODLE_DOCKER_DBUSER');
 $CFG->dbpass    = getenv('MOODLE_DOCKER_DBPASS');
-$CFG->prefix    = 'm_';
 $CFG->dboptions = ['dbcollation' => getenv('MOODLE_DOCKER_DBCOLLATION')];
 
-$CFG->wwwroot   = 'http://localhost';
+$CFG->wwwroot   = 'http://localhost:8000';
 $port = getenv('MOODLE_DOCKER_WEB_PORT');
 if (!empty($port)) {
     $CFG->wwwroot .= ":{$port}";
@@ -22,6 +18,15 @@ $CFG->dataroot  = '/var/www/moodledata';
 $CFG->admin     = 'admin';
 $CFG->directorypermissions = 0777;
 $CFG->smtphosts = 'mailhog:1025';
+
+// Default salt to use if you are using the sample database dump at
+// https://test.ccle.ucla.edu/vagrant/new_moodle_instance.sql
+$CFG->passwordsaltmain = 'a_very_long_salt_string';
+
+// Registrar
+$CFG->registrar_dbhost = '';
+$CFG->registrar_dbuser = '';
+$CFG->registrar_dbpass = '';
 
 // Debug options - possible to be controlled by flag in future..
 $CFG->debug = (E_ALL | E_STRICT); // DEBUG_DEVELOPER
