@@ -7,7 +7,8 @@ services:
   db:
     image: mysql:5
     volumes:
-       - ./files/new_moodle_instance.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+       - ./assets/mysql/new_moodle_instance.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+       - data:/var/lib/mysql
     command: >
                 --character-set-server=utf8mb4
                 --collation-server=utf8mb4_bin
@@ -19,3 +20,18 @@ services:
       MYSQL_USER: moodle
       MYSQL_PASSWORD: "m@0dl3ing"
       MYSQL_DATABASE: moodle
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+       - PMA_ARBITRARY=1
+       - PMA_USER=root
+       - PMA_PASSWORD=
+    restart: always
+    ports:
+       - 8001:80
+    volumes:
+       - /sessions
+volumes:
+  data:
+    driver: "local"
