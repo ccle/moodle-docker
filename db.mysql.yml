@@ -5,23 +5,32 @@ services:
       MOODLE_DOCKER_DBTYPE: mysqli
       MOODLE_DOCKER_DBCOLLATION: utf8mb4_bin
   db:
-    # image: mysql:5
-    # command: >
-    #             --character-set-server=utf8mb4
-    #             --collation-server=utf8mb4_bin
-    #             --innodb_file_format=barracuda
-    #             --innodb_file_per_table=On
-    #             --innodb_large_prefix=On
-    build:
-      context: ./dbmysql
-    image: dbmysql_img
+    image: mysql:5
+    command: >
+                --character-set-server=utf8mb4
+                --collation-server=utf8mb4_bin
+                --innodb_file_format=barracuda
+                --innodb_file_per_table=On
+                --innodb_large_prefix=On
     volumes:
+      - ./assets/mysql/new_moodle_instance.sql:/docker-entrypoint-initdb.d/schema.sql:ro
       - data:/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: "m@0dl3ing"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_USER: moodle
       MYSQL_PASSWORD: "m@0dl3ing"
       MYSQL_DATABASE: moodle
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_USER=root
+      - PMA_PASSWORD=
+    restart: always
+    ports:
+      - 8001:80
+    volumes:
+      - /sessions
 volumes:
   data:
     driver: "local"

@@ -13,6 +13,7 @@ services:
       MOODLE_DOCKER_DBUSER: moodle
       MOODLE_DOCKER_DBPASS: "m@0dl3ing"
       MOODLE_DOCKER_BROWSER: firefox
+    build: .
   db:
     image: postgres:9
     environment:

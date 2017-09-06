@@ -4,7 +4,8 @@ export MOODLE_DOCKER_WWWROOT=$1
 export MOODLE_DOCKER_DB=mysql
 docker=`pwd`
 echo $docker
-ln -s $MOODLE_DOCKER_WWWROOT/local/ucla/config/shared_dev_moodle-config.php $MOODLE_DOCKER_WWWROOT/config.php
+
+curl -L https://test.ccle.ucla.edu/vagrant/new_moodle_instance.sql > assets/mysql/new_moodle_instance.sql
 cp config.docker-template.php $MOODLE_DOCKER_WWWROOT/config.php
 
 cd $MOODLE_DOCKER_WWWROOT
