@@ -34,7 +34,7 @@ Note: If you already have the CCLE codebase set up, you can skip step 2 and clon
     * git clone git@github.com:ucla/moodle.git
     * cd moodle
     * git submodule update --init --recursive
-3. Run the setup script from the moodle-docker directory
+3. Run the setup script from the ccle directory
     * ./setup.php /path/to/moodle/code (In this case, the path is simply ./moodle)
        * If you get an error like this: "ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?", then you need to run with sudo (./setup.sh /path/to/moodle/code --with-sudo). Don't call sudo directly on the setup script, otherwise Composer will be unhappy.
        * This script may take a long time to complete. If the Docker container output appears to get stuck at "/usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/schema.sql," don't worry, everything is working as normal. This just means the initial DB is getting set up within the container, which can take some time. Wait until the moodle_docker_db_1 output has moved past this line (ignore any mailhog ouput).
@@ -49,6 +49,10 @@ Note: If you already have the CCLE codebase set up, you can skip step 2 and clon
 2. You can now spin up the containers manually, with '[sudo -E] bin/moodle-docker-compose up -d'. The '-d' causes the containers to run in detached mode, meaning they will run in the background. If you needed the '--with-sudo' option in the setup script, you'll need 'sudo -E' every time you call moodle-docker-compose.
 3. Stop the containers with '[sudo -E] bin/moodle-docker-compose stop'. This stops the containers without removing them.
 4. If you want to quickly spin up the Docker containers without setting environmental variables, you can run './setup.sh /path/to/moodle/code [--with-sudo] --no-build' to quickly spin up the containers in detached mode without rebuilding the Docker images. However, you will not be able to use any other docker-compose options unless you follow the above steps.
+
+If you need to SSH into the webserver container for any reason, use the following command:
+
+'[sudo] docker exec -it moodledocker_webserver_1 bash'
 
 ### Troubleshooting
 
