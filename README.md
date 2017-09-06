@@ -24,6 +24,8 @@ Fortunately for you, you're living in the golden age of setting up local CCLE de
 
 ### Download and set up environment
 
+Note: If you already have the CCLE codebase set up, you can skip step 2 and clone moodle-docker wherever you want.
+
 1. Check out moodle-docker
     * mkdir ~/Projects && cd ~/Projects
     * git clone git@github.com:ccle/moodle-docker.git ccle
@@ -32,11 +34,29 @@ Fortunately for you, you're living in the golden age of setting up local CCLE de
     * git clone git@github.com:ucla/moodle.git
     * cd moodle
     * git submodule update --init --recursive
-3. Run the setup script
-    * ./setup.php /path/to/moodle/code
-       * If you get an error like this: "ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?", then you need to run with sudo (sudo ./script.sh /path/to/moodle/code).
-       * This script may take a long time to complete. If the Docker container output appears to get stuck at "/usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/schema.sql," don't worry, everything is working as normal. This just means the initial DB is getting set up within the container, which can take some time. Wait until the moodle_docker_db_1 output has moved past this line (ignore the mailhog ouput).
-    * This setup script should only be run the first time you set up your environment. You shouldn't need to run it again unless something has gone wrong.
+3. Run the setup script from the moodle-docker directory
+    * ./setup.php /path/to/moodle/code (In this case, the path is simply ./moodle)
+       * If you get an error like this: "ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?", then you need to run with sudo (./setup.sh /path/to/moodle/code --with-sudo). Don't call sudo directly on the setup script, otherwise Composer will be unhappy.
+       * This script may take a long time to complete. If the Docker container output appears to get stuck at "/usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/schema.sql," don't worry, everything is working as normal. This just means the initial DB is getting set up within the container, which can take some time. Wait until the moodle_docker_db_1 output has moved past this line (ignore any mailhog ouput).
+4. See if CCLE works as expected
+    * When you go to http://localhost:8000, you should be greeted with the typical CCLE login page, complete with UCLA theme. If you don't see this, something might have gone wrong.
+    * PHPMyAdmin is accessible at http://localhost:8001. You shouldn't have to log in, but if it does prompt you for a username and password, the username is 'root' and the password is empty.
+    * Mail sent from your dev instance is captured by MailHog. You can view these emails at http://localhost:8000/_/mail.
+
+### Use after initial setup
+
+1. After you've done the initial setup described above, you can use Ctrl-C to stop the containers. You should now set the environmental variables for the Docker script. In your terminal, enter 'export MOODLE_DOCKER_WWWROOT=/path/to/moodle/code' (substituting the correct path, obviously) and 'export MOODLE_DOCKER_DB=mysql'. These variables will be reset if you close your terminal, so if you want them to persist, I recommend you add the above two commands to your .bash_profile or .bashrc file.
+2. You can now spin up the containers manually, with '[sudo -E] bin/moodle-docker-compose up -d'. The '-d' causes the containers to run in detached mode, meaning they will run in the background. If you needed the '--with-sudo' option in the setup script, you'll need 'sudo -E' every time you call moodle-docker-compose.
+3. Stop the containers with '[sudo -E] bin/moodle-docker-compose stop'. This stops the containers without removing them.
+4. If you want to quickly spin up the Docker containers without setting environmental variables, you can run './setup.sh /path/to/moodle/code [--with-sudo] --no-build' to quickly spin up the containers in detached mode without rebuilding the Docker images. However, you will not be able to use any other docker-compose options unless you follow the above steps.
+
+### Troubleshooting
+
+So you had a problem setting up Docker. Don't worry, I had plenty of problems too.
+
+1. First, make sure your environmental variables are set. In the same terminal window that you will run Docker from, enter 'export MOODLE_DOCKER_WWWROOT=/path/to/moodle/code' (substituting the correct path, obviously) and 'export MOODLE_DOCKER_DB=mysql'. You can double-check these variables are set properly by echo-ing them in the shell.
+2. Next, try running 'sudo -E bin/moodle-docker-compose down' to stop and remove the containers. Then, run 'sudo -E bin/moodle-docker-compose up --build' to rebuild the docker images and bring the containers up again. If you did not have to run the setup script with sudo, you don't have to use it here, either.
+3. If the above two steps did not fix your issue, try the nuclear option. Run './purge.sh', which should wipe all your Docker containers, images, and volumes. If you do this, you will have to run the setup script again and it will install everything from scratch, which will take a long time, so only do this if nothing else has worked.
 
 
 ## Example usage

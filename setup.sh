@@ -1,3 +1,9 @@
+# Check some args
+if ! [[ -d "$1" ]]; then
+    echo "Error: The first argument must be the path to your moodle code. '$1' is not a directory"
+    exit 1
+fi    
+
 # Set up environmental vars
 export MOODLE_DOCKER_WWWROOT=$1
 export MOODLE_DOCKER_DB=mysql
@@ -32,14 +38,34 @@ cp "$docker/moodle-docker_config_private-dist.php" config_private.php
 echo "Updating moodle submodules..."
 git submodule update --init --recursive
 
-echo "Doing composer install and setup..."
-curl -sS http://getcomposer.org/installer | php
-php composer.phar install
-php composer.phar install -d theme/uclashared
+# See if we need to do the composer update
+if ! [ -e composer.phar ]; then
+    echo "Doing composer install and setup..."
+    curl -sS http://getcomposer.org/installer | php
+    php composer.phar install
+    php composer.phar install -d theme/uclashared
+else
+    echo "Composer set already done; no need to redo"
+fi
 
 # Back to docker
 cd $docker
 
-echo "Spinning up the containers for the first time with bin/moodle-docker-compose up --build"
-# Up the containers for the first time with the --build flag
-bin/moodle-docker-compose up --build
+buildflag='--build'
+if [ "$2" == "--no-build" ] || [ "$3" == "--no-build" ]; then
+    buildflag='-d'
+fi
+
+if [ "$2" == "--with-sudo" ] || [ "$3" == "--with-sudo" ]; then
+    # Up the containers for the first time with the --build flag (only use sudo if necessary)
+    echo "Spinning up the containers for the first time with sudo -E bin/moodle-docker-compose up $buildflag"
+    sudo -E bin/moodle-docker-compose up $buildflag
+else
+    echo "Spinning up the containers for the first time with bin/moodle-docker-compose up $buildflag"
+    bin/moodle-docker-compose up $buildflag
+    # If the script failed, let the user know they probably need to run with sudo
+    if ! [ $? -eq 0 ]; then
+	echo ""
+	echo "It seems 'docker-compose up' has failed; try running this script with the '--with-sudo' flag"
+    fi
+fi
