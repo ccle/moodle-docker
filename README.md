@@ -38,7 +38,7 @@ Note: If you already have the CCLE codebase set up, you can skip step 2 and clon
    - cd moodle
    - git submodule update --init --recursive
 3. Run the setup script from the ccle directory
-   - ./setup.php /path/to/moodle/code (In this case, the path is simply ./moodle)
+   - ./setup.sh /path/to/moodle/code (If you followed both steps 1 and 2, the path is simply ./moodle)
      - If you get an error like this: "ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?", then you need to run with sudo (./setup.sh /path/to/moodle/code --with-sudo). Don't call sudo directly on the setup script, otherwise Composer will be unhappy.
      - This script may take a long time to complete. If the Docker container output appears to get stuck at "/usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/schema.sql," don't worry, everything is working as normal. This just means the initial DB is getting set up within the container, which can take some time. Wait until the moodle_docker_db_1 output has moved past this line (ignore any mailhog ouput).
 4. See if CCLE works as expected
