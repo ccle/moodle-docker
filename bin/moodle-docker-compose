@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 set -e
 
-# Ensure config.php is in place
-cp config.docker-template.php $MOODLE_DOCKER_WWWROOT/config.php
-
 if [ -z "$MOODLE_DOCKER_DB" ];
 then
     echo 'Error: $MOODLE_DOCKER_DB is not set'
