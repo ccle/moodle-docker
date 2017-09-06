@@ -20,8 +20,6 @@ CCLE developers to easily deploy a testing environment for CCLE
 
 ## How to set it up
 
-Fortunately for you, you're living in the golden age of setting up local CCLE dev environments. This should be a piece of cake (if the code holds up).
-
 ### Download and set up environment
 
 Note: If you already have the CCLE codebase set up, you can skip step 2 and clone moodle-docker wherever you want.
