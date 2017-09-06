@@ -1,8 +1,9 @@
-# moodle-docker: Docker Containers for Moodle Developers
+# moodle-docker for CCLE
 
-[![Build Status](https://travis-ci.org/moodlehq/moodle-docker.svg?branch=master)](https://travis-ci.org/moodlehq/moodle-docker/branches)
+[![Build Status](https://travis-ci.org/ccle/moodle-docker.svg?branch=ucla)](https://travis-ci.org/ccle/moodle-docker/branches)
 
-This repository contains Docker configuration aimed at Moodle developers and testers to easily deploy a testing environment for Moodle.
+So you want to get CCLE up and running locally? Well, you've come to the right place. This repository contains a Docker config aimed at
+CCLE developers to easily deploy a testing environment for CCLE
 
 ## Features:
 
@@ -12,36 +13,33 @@ This repository contains Docker configuration aimed at Moodle developers and tes
 - All PHP Extensions enabled configured for external services (e.g. solr, ldap)
 - All supported PHP versions
 - Zero-configuration approach
-- Backed by [automated tests](https://travis-ci.org/moodlehq/moodle-docker/branches)
+- Backed by [automated tests](https://travis-ci.org/ccle/moodle-docker/branches)
 
 ## Prerequisites
 
 - [Docker](https://docs.docker.com) and [Docker Compose](https://docs.docker.com/compose/) installed
-- 3.25GB of RAM (if you choose [Microsoft SQL Server](https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-setup#prerequisites) as db server)
+- 3.25GB of RAM (to [run Microsoft SQL Server](https://docs.microsoft.com/en-us/sql/linux/sql-server-linux-setup#prerequisites))
+- Git: http://git-scm.com/
+- Access to the CCLE codebase.
+  - Make sure you are using SSH keys to access to the CCLE codebase: https://help.github.com/articles/generating-ssh-keys
 
-## Quick start
+## How to set it up
 
-```bash
-# Set up path to Moodle code
-export MOODLE_DOCKER_WWWROOT=/path/to/moodle/code
-# Choose a db server (Currently supported: pgsql, mariadb, mysql, mssql, oracle)
-export MOODLE_DOCKER_DB=pgsql
+### Download and set up environment
 
-# Ensure customized config.php for the Docker containers is in place
-cp config.docker-template.php $MOODLE_DOCKER_WWWROOT/config.php
-
-# Start up containers
-bin/moodle-docker-compose up -d
-
-# Wait for DB to come up (important for oracle/mssql)
-bin/moodle-docker-wait-for-db
-
-# Work with the containers (see below)
-# [..]
-
-# Shut down and destroy containers
-bin/moodle-docker-compose down
-```
+1. Check out moodle-docker
+   - mkdir ~/Projects && cd ~/Projects
+   - git clone git@github.com:ccle/moodle-docker.git ccle
+2. Check out CCLE the codebase from Github
+   - cd ~/Projects/ccle
+   - git clone git@github.com:ucla/moodle.git
+   - cd moodle
+   - git submodule update --init --recursive
+3. Run the setup script
+   - ./setup.php /path/to/moodle/code
+     - If you get an error like this: "ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?", then you need to run with sudo (sudo ./script.sh /path/to/moodle/code).
+     - This script may take a long time to complete. If the Docker container output appears to get stuck at "/usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/schema.sql," don't worry, everything is working as normal. This just means the initial DB is getting set up within the container, which can take some time. Wait until the moodle_docker_db_1 output has moved past this line (ignore the mailhog ouput).
+   - This setup script should only be run the first time you set up your environment. You shouldn't need to run it again unless something has gone wrong.
 
 ## Use containers for running behat tests
 
@@ -89,8 +87,6 @@ OK (2 tests, 7 assertions)
 ```
 
 Notes:
-
-<<<<<<< HEAD
 
 - # If you want to run test with coverage report, use command: `bin/moodle-docker-compose exec webserver phpdbg -qrr vendor/bin/phpunit --coverage-text auth_manual_testcase auth/manual/tests/manual_test.php`
   Moodle is configured to listen on `http://localhost:8000/` and mailcatcher is listening on `http://localhost:8000/_/mail` to view emails which Moodle has sent out.
