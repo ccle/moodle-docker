@@ -54,6 +54,8 @@ If you need to SSH into the webserver container for any reason, use the followin
 
 '[sudo] docker exec -it moodledocker_webserver_1 bash'
 
+If you want to use vagrant again, you'll have to run 'cp config_private-dist.php config_private.php' in the moodle directory. To switch back to docker, just run './setup /path/to/moodle/code [--with-sudo] --no-build' to copy the appropriate config file back.
+
 ### Troubleshooting
 
 So you had a problem setting up Docker. Don't worry, I had plenty of problems too.
