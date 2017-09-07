@@ -29,6 +29,8 @@ Note: If you already have the CCLE codebase set up, you can skip step 2 and clon
 1. Check out moodle-docker
     * mkdir ~/Projects && cd ~/Projects
     * git clone git@github.com:ccle/moodle-docker.git ccle
+    * cd ~/Projects/ccle
+    * git checkout ucla
 2. Check out CCLE the codebase from Github
     * cd ~/Projects/ccle
     * git clone git@github.com:ucla/moodle.git
@@ -37,7 +39,7 @@ Note: If you already have the CCLE codebase set up, you can skip step 2 and clon
 3. Run the setup script from the ccle directory
     * ./setup.sh /path/to/moodle/code (If you followed both steps 1 and 2, the path is simply ./moodle)
        * If you get an error like this: "ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?", then you need to run with sudo (./setup.sh /path/to/moodle/code --with-sudo). Don't call sudo directly on the setup script, otherwise Composer will be unhappy.
-       * This script may take a long time to complete. If the Docker container output appears to get stuck at "/usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/schema.sql," don't worry, everything is working as normal. This just means the initial DB is getting set up within the container, which can take some time. Wait until the moodle_docker_db_1 output has moved past this line (ignore any mailhog ouput).
+       * This script may take a long time to complete. If the Docker container output appears to get stuck at "/usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/schema.sql," don't worry, everything is working as normal. This just means the initial DB is getting set up within the container, which can take some time. Wait until the moodle_docker_db_1 output has moved past this line (ignore any mailhog ouput, it's not useful to us). You'll know the setup has completed when the last line outputted by moodle_docker_db_1 is *no longer* "/usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/schema.sql".
 4. See if CCLE works as expected
     * When you go to http://localhost:8000, you should be greeted with the typical CCLE login page, complete with UCLA theme. If you don't see this, something might have gone wrong.
     * PHPMyAdmin is accessible at http://localhost:8001. You shouldn't have to log in, but if it does prompt you for a username and password, the username is 'root' and the password is empty.
