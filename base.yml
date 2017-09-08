@@ -2,6 +2,7 @@ version: "2"
 services:
   webserver:
     image: moodlehq/moodle-php-apache:7.0
+    container_name: moodledocker_webserver_1
     build: .
     depends_on:
       - db
@@ -21,6 +22,7 @@ services:
       POSTGRES_PASSWORD: "m@0dl3ing"
       POSTGRES_DB: moodle
   selenium:
+    container_name: moodledocker_selenium_1
     image: selenium/standalone-firefox:2.53.1
     volumes:
       - "${MOODLE_DOCKER_WWWROOT}:/var/www/html:ro"

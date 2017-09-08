@@ -6,4 +6,5 @@ services:
     depends_on:
       - mailhog
   mailhog:
+    container_name: moodledocker_mailhog_1
     image: mailhog/mailhog

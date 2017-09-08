@@ -6,6 +6,7 @@ services:
       MOODLE_DOCKER_DBCOLLATION: utf8mb4_bin
   db:
     image: mysql:5
+    container_name: moodledocker_db_1
     volumes:
        - ./assets/mysql/new_moodle_instance.sql:/docker-entrypoint-initdb.d/schema.sql:ro
        - data:/var/lib/mysql
@@ -22,7 +23,7 @@ services:
       MYSQL_DATABASE: moodle
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
+    container_name: moodledocker_phpmyadmin_1
     environment:
        - PMA_ARBITRARY=1
        - PMA_USER=root
