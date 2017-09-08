@@ -2,6 +2,8 @@ version: "2"
 services:
   webserver:
     image: "moodlehq/moodle-php-apache:${MOODLE_DOCKER_PHP_VERSION}"
+    container_name: moodledocker_webserver_1
+    build: .
     depends_on:
       - db
     volumes:
@@ -24,5 +26,6 @@ services:
     image: moodlehq/moodle-exttests
   selenium:
     image: "selenium/standalone-firefox${MOODLE_DOCKER_SELENIUM_SUFFIX}:2.53.1"
+    container_name: moodledocker_selenium_1
     volumes:
       - "${MOODLE_DOCKER_WWWROOT}:/var/www/html:ro"
