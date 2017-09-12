@@ -23,6 +23,9 @@ services:
       POSTGRES_DB: moodle
   selenium:
     container_name: moodledocker_selenium_1
-    image: selenium/standalone-firefox:2.53.1
+    image: selenium/standalone-firefox-debug:2.53.1
+    build: ./selenium/
+    ports:
+      - 5900:5900
     volumes:
       - "${MOODLE_DOCKER_WWWROOT}:/var/www/html:ro"
