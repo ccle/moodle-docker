@@ -57,11 +57,24 @@ If you need to SSH into the webserver container for any reason, use the followin
 
 If you want to use vagrant again, you'll have to run 'cp config_private-dist.php config_private.php' in the moodle directory. To switch back to docker, just run './setup /path/to/moodle/code [--with-sudo] --no-build' to copy the appropriate config file back.
 
-### Using VNC to view Behat tests
+### Running Behat tests and using VNC to view Behat tests
 
-1. Download a VNC client: https://www.realvnc.com/en/connect/download/viewer/
-2. With the containers running, enter 0.0.0.0:5900 as the port in VNC Viewer. You will be prompted for a password. The password is 'test' by default, but you can change it by editing ./selenium/Dockerfile
-3. You should be able to see an empty Desktop. You can now connect to the webserver container with '[sudo] docker exec -it moodledocker_webserver_1 bash' and run your Behat tests as normal. When the tests are running, you should be able to see a Firefox window pop up in the VNC viewer and start to run the Behat test steps.
+1. Change the linked config.php file from local/ucla/config/shared_dev_moodle-config.php to local/ucla/config/shared_behat_moodle-config.php.
+    ```
+    cd moodle; rm config.php ; ln -s local/ucla/config/shared_behat_moodle-config.php config.php
+    ```
+2. Initialize Behat
+    ```
+    cd ..; bin/moodle-docker-compose exec webserver php admin/tool/behat/cli/init.php
+    ```
+3. Download a VNC client: https://www.realvnc.com/en/connect/download/viewer/
+4. With the containers running, enter 0.0.0.0:5900 as the port in VNC Viewer. You will be prompted for a password. The password is 'test' by default, but you can change it by editing ./selenium/Dockerfile
+5. You should be able to see an empty Desktop. 
+6. You can now run a Behat test by running:
+    ```
+    bin/moodle-docker-compose exec webserver php admin/tool/behat/cli/run.php --tags=@ucla
+    ```
+7. When the tests are running, you should be able to see a Firefox window pop up in the VNC viewer and start to run the Behat test steps. The difference between the shared_behat_moodle-config.php and the shared_dev_moodle-config.php config files is that Behat has a fewer settings hard coded and has debugging turned off. To develop features with Moodle configured more like Production, use the dev config, but when writing tests run the behat config.
 
 ### Troubleshooting
 
@@ -71,68 +84,6 @@ So you had a problem setting up Docker. Don't worry, I had plenty of problems to
 2. Next, try running 'sudo -E bin/moodle-docker-compose down' to stop and remove the containers. Then, run 'sudo -E bin/moodle-docker-compose up --build' to rebuild the docker images and bring the containers up again. If you did not have to run the setup script with sudo, you don't have to use it here, either.
 3. If the above two steps did not fix your issue, try the nuclear option. Run './purge.sh [--volumes] [--images] [--untagged] [--all]' By default, the purge script only removes the containers, but with the additional flags, it will remove the volumes and images (along with untagged images). Running the script with the '--volumes' option will remove your database, and you will have to reinstall it with the setup script. If you do this with all the options ('./purge.sh --all), you will have to run the setup script again and it will install everything from scratch, which will take a long time, so only do this if nothing else has worked.
 
-
-## Example usage
-
-```bash
-# Set up path to code and choose a db server (pgsql/mssql/oracle/mysql)
-export MOODLE_DOCKER_WWWROOT=/path/to/moodle/code
-export MOODLE_DOCKER_DB=mssql
-
-# Ensure config.php is in place
-cp config.docker-template.php $MOODLE_DOCKER_WWWROOT/config.php
-
-# Start up containers
-bin/moodle-docker-compose up -d
-
-# Run behat tests..
-bin/moodle-docker-compose exec webserver php admin/tool/behat/cli/init.php
-# [..]
-
-bin/moodle-docker-compose exec webserver php admin/tool/behat/cli/run.php --tags=@auth_manual
-Running single behat site:
-Moodle 3.3rc1 (Build: 20170505), 381db2fe8df5c381f633fa2a92e61c6f0d7308cb
-Php: 7.1.5, sqlsrv: 14.00.0500, OS: Linux 4.9.13-moby x86_64
-Server OS "Linux", Browser: "firefox"
-Started at 25-05-2017, 19:04
-...............
-
-2 scenarios (2 passed)
-15 steps (15 passed)
-1m35.32s (41.60Mb)
-
-# Install for manual testing (optional)
-bin/moodle-docker-compose exec webserver php admin/cli/install_database.php --agree-license --fullname="Docker moodle" --shortname="docker_moodle" --adminpass="test" --adminemail="admin@example.com"
-# Access http://localhost:8000/ on your browser
-
-# Shut down containers
-bin/moodle-docker-compose down
-```
-
-Note that the behat faildump directory is exposed at http://localhost:8000/_/faildumps/.
-
-## Manual testing
-
-Moodle is configured to listen on `http://localhost:8000/` and mailhog is listening on `http://localhost:8000/_/mail` to view emails which Moodle has sent out.
-
-
-## Branching Model
-
-This repo uses branches to accomodate different php versions as well as some of the higher/lower versions of PostgreSQL/MySQL:
-
-
-| Branch Name  | PHP Version | Build Status | Notes |
-|--------------|-------------|--------------|-------|
-| master | 7.1.x | [![Build Status](https://travis-ci.org/danpoltawski/moodle-docker.svg?branch=master)](https://travis-ci.org/danpoltawski/moodle-docker) | Same as branch php71 |
-| php71 | 7.1.x | [![Build Status](https://travis-ci.org/danpoltawski/moodle-docker.svg?branch=php71)](https://travis-ci.org/danpoltawski/moodle-docker) | |
-| php70 | 7.0.x | [![Build Status](https://travis-ci.org/danpoltawski/moodle-docker.svg?branch=php70)](https://travis-ci.org/danpoltawski/moodle-docker) | |
-| php56 | 5.6.x | [![Build Status](https://travis-ci.org/danpoltawski/moodle-docker.svg?branch=php56)](https://travis-ci.org/danpoltawski/moodle-docker) | |
-
-## Advanced usage
-
-As can be seen in [bin/moodle-docker-compose](https://github.com/danpoltawski/moodle-docker/blob/travis/bin/moodle-docker-compose),
-this repo is just a series of docker-compose configurations and light wrapper which make use of companion docker images. Each part
-is designed to be reusable and you are encouraged to use the docker[-compose] commands as needed.
 
 ### Companion docker images
 
