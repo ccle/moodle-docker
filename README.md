@@ -31,21 +31,22 @@ Note: If you already have the CCLE codebase set up, you can skip step 2 and clon
    - mkdir ~/Projects && cd ~/Projects
    - git clone git@github.com:ccle/moodle-docker.git ccle
    - cd ~/Projects/ccle
+   - git checkout ucla
 2. Check out CCLE the codebase from Github
    - cd ~/Projects/ccle
    - git clone git@github.com:ucla/moodle.git
+   - cd moodle
+   - git submodule update --init --recursive
 3. Run the setup script from the ccle directory
-   <<<<<<< HEAD
-   - ./setup.sh /path/to/moodle/code (If you followed both steps 1 and 2, the path is simply ./moodle) - If you get an error like this: "ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?", then you need to run with sudo (./setup.sh /path/to/moodle/code --with-sudo). Don't call sudo directly on the setup script, otherwise Composer will be unhappy. - This script may take a long time to complete. If the Docker container output appears to get stuck at "/usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/schema.sql," don't worry, everything is working as normal. This just means the initial DB is getting set up within the container, which can take some time. Wait until the moodle*docker_db_1 output has moved past this line (ignore any mailhog ouput, it's not useful to us). You'll know the setup has completed when the last line outputted by moodle_docker_db_1 is \_no longer* "/usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/schema.sql".
-     =======
-     _ ./setup.sh ./moodle (substituting the correct path if your moodle code is located somewhere else)
-     _ If you get an error like this: "ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?", then you need to run with sudo (./setup.sh /path/to/moodle/code --with-sudo). DO NOT call sudo directly on the setup script, otherwise Composer will be unhappy.
-     * This script may take a long time to complete. If the Docker container output appears to get stuck at "/usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/schema.sql," don't worry, everything is working as normal. This just means the initial DB is getting set up within the container, which can take some time. Wait until the moodle_docker_db_1 output has moved past this line (ignore any mailhog ouput, it's not useful to us). You'll know the setup has completed when the last line outputted by moodle_docker_db_1 is *no longer\* "/usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/schema.sql".
-     > > > > > > > Made a minor upgrade to the README, fixed the phpmyadmin container name, and overhauled the purge script
+   - ./setup.sh ./moodle (substituting the correct path if your moodle code is located somewhere else)
+     - If you get an error like this: "ERROR: Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?", then you need to run with sudo (./setup.sh /path/to/moodle/code --with-sudo). DO NOT call sudo directly on the setup script, otherwise Composer will be unhappy.
+     - This script may take a long time to complete. If the Docker container output appears to get stuck at "/usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/schema.sql," don't worry, everything is working as normal. This just means the initial DB is getting set up within the container, which can take some time. Wait until the moodle_docker_db_1 output has moved past this line (ignore any mailhog ouput, it's not useful to us). You'll know the setup has completed when the last line outputted by moodle_docker_db_1 is _no longer_ "/usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/schema.sql".
 4. See if CCLE works as expected
    - When you go to http://localhost:8000, you should be greeted with the typical CCLE login page, complete with UCLA theme. If you don't see this, something might have gone wrong.
    - PHPMyAdmin is accessible at http://localhost:8001. You shouldn't have to log in, but if it does prompt you for a username and password, the username is 'root' and the password is empty.
    - Mail sent from your dev instance is captured by MailHog. You can view these emails at http://localhost:8000/_/mail.
+5. You can login using the following accounts: admin/test, instructor/test, student/test
+6. Download and install the English (United States)(en_us) language pack. Instructions are here: https://ccle.ucla.edu/mod/qanda/view.php?id=897711&mode=entry&hook=5345
 
 ### Use after initial setup
 
@@ -61,44 +62,35 @@ If you need to SSH into the webserver container for any reason, use the followin
 
 If you want to use vagrant again, you'll have to run 'cp config_private-dist.php config_private.php' in the moodle directory. To switch back to docker, just run './setup /path/to/moodle/code [--with-sudo] --no-build' to copy the appropriate config file back.
 
-### Using VNC to view Behat tests
+### Running Behat tests and using VNC to view Behat tests
+
+1. Change the linked config.php file from local/ucla/config/shared_dev_moodle-config.php to local/ucla/config/shared_behat_moodle-config.php.
+   ```
+   cd moodle; rm config.php ; ln -s local/ucla/config/shared_behat_moodle-config.php config.php
+   ```
+
+- The difference between the shared_behat_moodle-config.php and the shared_dev_moodle-config.php config files is that Behat has a fewer settings hard coded and has debugging turned off. To develop features with Moodle configured more like Production, use the dev config, but when writing tests run the behat config.
+
+2. Initialize Behat
+   ```
+   cd ..; bin/moodle-docker-compose exec webserver php admin/tool/behat/cli/init.php
+   ```
+3. You can now run a Behat test by running:
+   ```
+   bin/moodle-docker-compose exec webserver php admin/tool/behat/cli/run.php --tags=@ucla
+   ```
+4. The behat faildump directory is exposed at http://localhost:8000/_/faildumps/.
+
+### Using VNC to view behat tests
+
+If `MOODLE_DOCKER_SELENIUM_VNC_PORT` is defined, selenium will expose a VNC session on the port specified so behat tests can be viewed in progress.
+
+For example, if you set `MOODLE_DOCKER_SELENIUM_VNC_PORT` to 5900..
 
 1. Download a VNC client: https://www.realvnc.com/en/connect/download/viewer/
-2. With the containers running, enter 0.0.0.0:5900 as the port in VNC Viewer. You will be prompted for a password. The password is 'test' by default, but you can change it by editing ./selenium/Dockerfile
-3. You should be able to see an empty Desktop. You can now connect to the webserver container with '[sudo] docker exec -it moodledocker_webserver_1 bash' and run your Behat tests as normal. When the tests are running, you should be able to see a Firefox window pop up in the VNC viewer and start to run the Behat test steps.
-
-### Troubleshooting
-
-So you had a problem setting up Docker. Don't worry, I had plenty of problems too.
-
-1. First, make sure your environmental variables are set. In the same terminal window that you will run Docker from, enter 'export MOODLE_DOCKER_WWWROOT=/path/to/moodle/code' (substituting the correct path, obviously) and 'export MOODLE_DOCKER_DB=mysql'. You can double-check these variables are set properly by echo-ing them in the shell.
-2. Next, try running 'sudo -E bin/moodle-docker-compose down' to stop and remove the containers. Then, run 'sudo -E bin/moodle-docker-compose up --build' to rebuild the docker images and bring the containers up again. If you did not have to run the setup script with sudo, you don't have to use it here, either.
-3. If the above two steps did not fix your issue, try the nuclear option. Run './purge.sh [--volumes] [--images] [--untagged] [--all]' By default, the purge script only removes the containers, but with the additional flags, it will remove the volumes and images (along with untagged images). Running the script with the '--volumes' option will remove your database, and you will have to reinstall it with the setup script. If you do this with all the options ('./purge.sh --all), you will have to run the setup script again and it will install everything from scratch, which will take a long time, so only do this if nothing else has worked.
-
-## Use containers for running behat tests
-
-```bash
-# Initialize behat environment
-bin/moodle-docker-compose exec webserver php admin/tool/behat/cli/init.php
-# [..]
-
-# Run behat tests
-bin/moodle-docker-compose exec -u www-data webserver php admin/tool/behat/cli/run.php --tags=@auth_manual
-Running single behat site:
-Moodle 3.4dev (Build: 20171006), 33a3ec7c9378e64c6f15c688a3c68a39114aa29d
-Php: 7.1.9, pgsql: 9.6.5, OS: Linux 4.9.49-moby x86_64
-Server OS "Linux", Browser: "firefox"
-Started at 25-05-2017, 19:04
-...............
-
-2 scenarios (2 passed)
-15 steps (15 passed)
-1m35.32s (41.60Mb)
-```
-
-Notes:
-
-- The behat faildump directory is exposed at http://localhost:8000/_/faildumps/.
+2. With the containers running, enter 0.0.0.0:5900 as the port in VNC Viewer. You will be prompted for a password. The password is 'secret'.
+3. You should be able to see an empty Desktop. When you run any Behat tests a browser will popup and you will see the tests execute.
+4. When the tests are running, you should be able to see a Firefox window pop up in the VNC viewer and start to run the Behat test steps.
 
 ## Use containers for running phpunit tests
 
@@ -124,28 +116,13 @@ Notes:
 
 - If you want to run test with coverage report, use command: `bin/moodle-docker-compose exec webserver phpdbg -qrr vendor/bin/phpunit --coverage-text auth_manual_testcase auth/manual/tests/manual_test.php`
 
-## Use containers for manual testing
+### Troubleshooting
 
-```bash
-# Initialize Moodle database for manual testing
-bin/moodle-docker-compose exec webserver php admin/cli/install_database.php --agree-license --fullname="Docker moodle" --shortname="docker_moodle" --adminpass="test" --adminemail="admin@example.com"
-```
+So you had a problem setting up Docker. Don't worry, I had plenty of problems too.
 
-Notes:
-
-- Moodle is configured to listen on `http://localhost:8000/`.
-- Mailhog is listening on `http://localhost:8000/_/mail` to view emails which Moodle has sent out.
-- The admin `username` you need to use for logging in is `admin` by default. You can customize it by passing `--adminuser='myusername'`
-
-## Using VNC to view behat tests
-
-If `MOODLE_DOCKER_SELENIUM_VNC_PORT` is defined, selenium will expose a VNC session on the port specified so behat tests can be viewed in progress.
-
-For example, if you set `MOODLE_DOCKER_SELENIUM_VNC_PORT` to 5900..
-
-1. Download a VNC client: https://www.realvnc.com/en/connect/download/viewer/
-2. With the containers running, enter 0.0.0.0:5900 as the port in VNC Viewer. You will be prompted for a password. The password is 'secret'.
-3. You should be able to see an empty Desktop. When you run any Behat tests a browser will popup and you will see the tests execute.
+1. First, make sure your environmental variables are set. In the same terminal window that you will run Docker from, enter 'export MOODLE_DOCKER_WWWROOT=/path/to/moodle/code' (substituting the correct path, obviously) and 'export MOODLE_DOCKER_DB=mysql'. You can double-check these variables are set properly by echo-ing them in the shell.
+2. Next, try running 'sudo -E bin/moodle-docker-compose down' to stop and remove the containers. Then, run 'sudo -E bin/moodle-docker-compose up --build' to rebuild the docker images and bring the containers up again. If you did not have to run the setup script with sudo, you don't have to use it here, either.
+3. If the above two steps did not fix your issue, try the nuclear option. Run './purge.sh [--volumes][--images] [--untagged][--all]' By default, the purge script only removes the containers, but with the additional flags, it will remove the volumes and images (along with untagged images). Running the script with the '--volumes' option will remove your database, and you will have to reinstall it with the setup script. If you do this with all the options ('./purge.sh --all), you will have to run the setup script again and it will install everything from scratch, which will take a long time, so only do this if nothing else has worked.
 
 ## Stop and restart containers
 
