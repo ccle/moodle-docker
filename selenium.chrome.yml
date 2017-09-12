@@ -6,4 +6,4 @@ services:
   selenium:
     image: "selenium/standalone-chrome${MOODLE_DOCKER_SELENIUM_SUFFIX}:3"
     volumes:
-        - /dev/shm:/dev/shm
+      - /dev/shm:/dev/shm

@@ -44,6 +44,4 @@ RUN echo "Driver = /usr/lib/x86_64-linux-gnu/odbc/libtdsodbc.so" >> /etc/odbcins
 RUN echo "">> /etc/odbcinst.ini
 
 # Not really sure what this line does (or if it's necessary)
-RUN odbcinst -i -d -f /etc/odbcinst.ini 
-
-
+RUN odbcinst -i -d -f /etc/odbcinst.ini
