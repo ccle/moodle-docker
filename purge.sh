@@ -46,6 +46,11 @@ if [ "$images" = true ]; then
     fi
 fi
 
+# Delete the main volume
+if [ "$volumes" = true ]; then
+    sudo docker volume rm moodledocker_data
+fi
+
 # Show that everything has been removed
 echo "Showing containers (sudo docker ps -a)..."
 sudo docker ps -a

@@ -57,6 +57,12 @@ If you need to SSH into the webserver container for any reason, use the followin
 
 If you want to use vagrant again, you'll have to run 'cp config_private-dist.php config_private.php' in the moodle directory. To switch back to docker, just run './setup /path/to/moodle/code [--with-sudo] --no-build' to copy the appropriate config file back.
 
+### Using VNC to view Behat tests
+
+1. Download a VNC client: https://www.realvnc.com/en/connect/download/viewer/
+2. With the containers running, enter 0.0.0.0:5900 as the port in VNC Viewer. You will be prompted for a password. The password is 'test' by default, but you can change it by editing ./selenium/Dockerfile
+3. You should be able to see an empty Desktop. You can now connect to the webserver container with '[sudo] docker exec -it moodledocker_webserver_1 bash' and run your Behat tests as normal. When the tests are running, you should be able to see a Firefox window pop up in the VNC viewer and start to run the Behat test steps.
+
 ### Troubleshooting
 
 So you had a problem setting up Docker. Don't worry, I had plenty of problems too.
