@@ -15,6 +15,8 @@ services:
       MOODLE_DOCKER_DBUSER: moodle
       MOODLE_DOCKER_DBPASS: "m@0dl3ing"
       MOODLE_DOCKER_BROWSER: firefox
+      no_proxy: localhost
+      HUB_ENV_no_proxy: localhost
   db:
     image: postgres:9
     environment:
@@ -27,5 +29,8 @@ services:
     build: ./selenium/
     ports:
       - 5900:5900
+    environment:
+      no_proxy: localhost
+      HUB_ENV_no_proxy: localhost
     volumes:
       - "${MOODLE_DOCKER_WWWROOT}:/var/www/html:ro"
