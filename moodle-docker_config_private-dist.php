@@ -21,15 +21,6 @@ $CFG->admin     = 'admin';
 $CFG->directorypermissions = 0777;
 $CFG->smtphosts = 'mailhog:1025';
 
-// Debug options - possible to be controlled by flag in future..
-$CFG->debug = (E_ALL | E_STRICT); // DEBUG_DEVELOPER
-$CFG->debugdisplay = 1;
-$CFG->debugstringids = 1; // Add strings=1 to url to get string ids.
-$CFG->perfdebug = 15;
-$CFG->debugpageinfo = 1;
-$CFG->allowthemechangeonurl = 1;
-$CFG->passwordpolicy = 0;
-
 $CFG->phpunit_dataroot  = '/var/www/phpunitdata';
 $CFG->phpunit_prefix = 't_';
 $CFG->behat_wwwroot   = 'http://webserver';
@@ -65,6 +56,10 @@ if (getenv('MOODLE_DOCKER_PHPUNIT_EXTRAS')) {
     define('TEST_ENROL_LDAP_BIND_PW', 'password');
     define('TEST_ENROL_LDAP_DOMAIN', 'ou=Users,dc=openstack,dc=org');
 }
+
+// Default salt to use if you are using the sample database dump at
+// https://test.ccle.ucla.edu/vagrant/new_moodle_instance.sql
+$CFG->passwordsaltmain = 'a_very_long_salt_string';
 
 // Registrar
 $CFG->registrar_dbtype = 'odbc_mssql';
