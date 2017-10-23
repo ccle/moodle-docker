@@ -21,6 +21,7 @@ services:
       MYSQL_USER: moodle
       MYSQL_PASSWORD: "m@0dl3ing"
       MYSQL_DATABASE: moodle
+    build: ./mysql/
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: moodledocker_phpmyadmin_1
