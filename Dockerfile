@@ -11,6 +11,10 @@ RUN docker-php-ext-install mcrypt
 
 ADD ./assets/files/etc/freetds.conf ./assets/files/etc/odbc.ini /etc/
 
+# Add php.ini file
+
+ADD ./assets/files/etc/php.ini /usr/local/etc/php/
+
 RUN apt-get update \
   && apt-get install unzip git unixODBC-dev libpq-dev -y
 
