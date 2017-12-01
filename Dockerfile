@@ -49,3 +49,6 @@ RUN echo "">> /etc/odbcinst.ini
 
 # Not really sure what this line does (or if it's necessary)
 RUN odbcinst -i -d -f /etc/odbcinst.ini
+
+# CCLE-7039 - Automate downloading of course email templates to build courses
+ADD ./assets/ccle_email_templates /tmp/ccle_email_templates
