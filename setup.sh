@@ -17,6 +17,16 @@ else
     echo "Initial SQL file already exists; no need to download it"
 fi
 
+# Clone the e-mail directory
+
+if ! [ -d ./assets/ccle_email_templates ]; then
+    echo "Cloning CCLE email templates..."
+    git clone git@github.com:ucla/ccle_email_templates.git ./assets/ccle_email_templates
+else
+    cd ./assets/ccle_email_templates
+    git checkout
+fi
+
 # Save docker dir
 docker=$(pwd)
 

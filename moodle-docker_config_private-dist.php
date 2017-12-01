@@ -61,6 +61,8 @@ if (getenv('MOODLE_DOCKER_PHPUNIT_EXTRAS')) {
 // https://test.ccle.ucla.edu/vagrant/new_moodle_instance.sql
 $CFG->passwordsaltmain = 'a_very_long_salt_string';
 
+$CFG->forced_plugin_settings['tool_uclacoursecreator']['email_template_dir'] = '/tmp/ccle_email_templates/course_creator';
+
 // Registrar
 $CFG->registrar_dbtype = 'odbc_mssql';
 $CFG->registrar_dbhost = '';
