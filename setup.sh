@@ -17,6 +17,9 @@ else
     echo "Initial SQL file already exists; no need to download it"
 fi
 
+# Save docker dir
+docker=$(pwd)
+
 # Clone the e-mail directory
 
 if ! [ -d ./assets/ccle_email_templates ]; then
@@ -25,10 +28,8 @@ if ! [ -d ./assets/ccle_email_templates ]; then
 else
     cd ./assets/ccle_email_templates
     git checkout
+    cd $docker
 fi
-
-# Save docker dir
-docker=$(pwd)
 
 # Go to moodle dir
 cd $MOODLE_DOCKER_WWWROOT
