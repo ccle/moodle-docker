@@ -6,7 +6,7 @@ fi
 
 # Set up environmental vars
 export MOODLE_DOCKER_WWWROOT=$1
-export MOODLE_DOCKER_DB=mysql
+export MOODLE_DOCKER_DB=mariadb
 
 # Download the initial sql file
 
