@@ -4,6 +4,11 @@ if ! [[ -d "$1" ]]; then
     exit 1
 fi    
 
+if ! [[ ! -z "$2" ]]; then
+    echo "Error: The second argument must be the project name."
+    exit 1
+fi
+
 # Set up environmental vars
 export MOODLE_DOCKER_WWWROOT=$1
 export MOODLE_DOCKER_DB=mariadb
@@ -63,17 +68,17 @@ fi
 cd $docker
 
 buildflag='--build'
-if [ "$2" == "--no-build" ] || [ "$3" == "--no-build" ]; then
+if [ "$3" == "--no-build" ] || [ "$4" == "--no-build" ]; then
     buildflag='-d'
 fi
 
-if [ "$2" == "--with-sudo" ] || [ "$3" == "--with-sudo" ]; then
+if [ "$3" == "--with-sudo" ] || [ "$4" == "--with-sudo" ]; then
     # Up the containers for the first time with the --build flag (only use sudo if necessary)
     echo "Spinning up the containers for the first time with sudo -E bin/moodle-docker-compose up $buildflag"
-    sudo -E bin/moodle-docker-compose up $buildflag
+    sudo -E bin/moodle-docker-compose -p "$2" up $buildflag
 else
     echo "Spinning up the containers for the first time with bin/moodle-docker-compose up $buildflag"
-    bin/moodle-docker-compose up $buildflag
+    bin/moodle-docker-compose -p "$2" up $buildflag
     # If the script failed, let the user know they probably need to run with sudo
     if ! [ $? -eq 0 ]; then
 	echo ""
