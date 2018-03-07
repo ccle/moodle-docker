@@ -2,6 +2,6 @@
 # for improved performance on mac
 version: "2"
 services:
-  webserver:
+  moodledocker_webserver:
     volumes:
         - "${MOODLE_DOCKER_WWWROOT}:/var/www/html:cached"

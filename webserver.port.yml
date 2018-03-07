@@ -1,6 +1,6 @@
 version: "2"
 services:
-  webserver:
+  moodledocker_webserver:
     environment:
       MOODLE_DOCKER_WEB_PORT: "${MOODLE_DOCKER_WEB_PORT}"
     ports:

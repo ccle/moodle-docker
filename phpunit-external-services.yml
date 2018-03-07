@@ -1,6 +1,6 @@
 version: "2"
 services:
-  webserver:
+  moodledocker_webserver:
       environment:
         MOODLE_DOCKER_PHPUNIT_EXTRAS: "true"
   memcached0:

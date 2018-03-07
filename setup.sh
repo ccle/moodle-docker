@@ -75,10 +75,10 @@ fi
 if [ "$3" == "--with-sudo" ] || [ "$4" == "--with-sudo" ]; then
     # Up the containers for the first time with the --build flag (only use sudo if necessary)
     echo "Spinning up the containers for the first time with sudo -E bin/moodle-docker-compose up $buildflag"
-    sudo -E bin/moodle-docker-compose -p "$2" up $buildflag
+    sudo -E bin/moodle-docker-compose "$2" up $buildflag
 else
     echo "Spinning up the containers for the first time with bin/moodle-docker-compose up $buildflag"
-    bin/moodle-docker-compose -p "$2" up $buildflag
+    bin/moodle-docker-compose "$2" up $buildflag
     # If the script failed, let the user know they probably need to run with sudo
     if ! [ $? -eq 0 ]; then
 	echo ""

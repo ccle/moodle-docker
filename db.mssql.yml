@@ -1,10 +1,10 @@
 version: "2"
 services:
-  webserver:
+  moodledocker_webserver:
     environment:
       MOODLE_DOCKER_DBTYPE: sqlsrv
       MOODLE_DOCKER_DBUSER: sa
-  db:
+  moodledocker_db:
     image: danpoltawski/moodle-db-mssql
     environment:
         ACCEPT_EULA: "y"

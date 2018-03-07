@@ -1,10 +1,9 @@
 version: "2"
 services:
-  webserver:
+  moodledocker_webserver:
     volumes:
       - "${ASSETDIR}/web/apache2_mailhog.conf:/etc/apache2/conf-enabled/apache2_mailhog.conf"
     depends_on:
-      - mailhog
-  mailhog:
-    container_name: moodledocker_mailhog_1
+      - moodledocker_mailhog
+  moodledocker_mailhog:
     image: mailhog/mailhog

@@ -1,12 +1,11 @@
 version: "2"
 services:
-  webserver:
+  moodledocker_webserver:
     environment:
       MOODLE_DOCKER_DBTYPE: mysqli
       MOODLE_DOCKER_DBCOLLATION: utf8mb4_bin
-  db:
+  moodledocker_db:
     image: mysql:5
-    container_name: moodledocker_db_1
     volumes:
        - ./assets/mysql/new_moodle_instance.sql:/docker-entrypoint-initdb.d/schema.sql:ro
        - data:/var/lib/mysql
@@ -22,9 +21,8 @@ services:
       MYSQL_PASSWORD: "m@0dl3ing"
       MYSQL_DATABASE: moodle
     build: ./mysql/
-  phpmyadmin:
+  moodledocker_phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: moodledocker_phpmyadmin_1
     environment:
        - PMA_ARBITRARY=1
        - PMA_USER=root
