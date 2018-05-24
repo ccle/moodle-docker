@@ -61,7 +61,6 @@ If you need to SSH into the webserver container for any reason, use the followin
 '[sudo] docker exec -it moodledocker_webserver_1 bash'
 
 If you want to use vagrant again, you'll have to run 'cp config_private-dist.php config_private.php' in the moodle directory. To switch back to docker, just run './setup /path/to/moodle/code [--with-sudo] --no-build' to copy the appropriate config file back.
-5. Download and install the English (United States)(en_us) language pack. Instructions are here: https://ccle.ucla.edu/mod/qanda/view.php?id=897711&mode=entry&hook=5345
 
 ### Running Behat tests and using VNC to view Behat tests
 
