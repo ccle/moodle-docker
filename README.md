@@ -42,6 +42,7 @@ Note: If you already have the CCLE codebase set up, you can skip step 2 and clon
     * When you go to http://localhost:8000, you should be greeted with the typical CCLE login page, complete with UCLA theme. If you don't see this, something might have gone wrong.
     * PHPMyAdmin is accessible at http://localhost:8001. You shouldn't have to log in, but if it does prompt you for a username and password, the username is 'root' and the password is empty.
     * Mail sent from your dev instance is captured by MailHog. You can view these emails at http://localhost:8000/_/mail.
+5. Download and install the English (United States)(en_us) language pack. Instructions are here: https://ccle.ucla.edu/mod/qanda/view.php?id=897711&mode=entry&hook=5345
 
 ### Use after initial setup
 
@@ -56,7 +57,6 @@ If you need to SSH into the webserver container for any reason, use the followin
 '[sudo] docker exec -it moodledocker_webserver_1 bash'
 
 If you want to use vagrant again, you'll have to run 'cp config_private-dist.php config_private.php' in the moodle directory. To switch back to docker, just run './setup /path/to/moodle/code [--with-sudo] --no-build' to copy the appropriate config file back.
-5. Download and install the English (United States)(en_us) language pack. Instructions are here: https://ccle.ucla.edu/mod/qanda/view.php?id=897711&mode=entry&hook=5345
 
 ### Running Behat tests and using VNC to view Behat tests
 
