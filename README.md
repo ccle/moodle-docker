@@ -84,7 +84,9 @@ So you had a problem setting up Docker. Don't worry, I had plenty of problems to
 1. First, make sure your environmental variables are set. In the same terminal window that you will run Docker from, enter 'export MOODLE_DOCKER_WWWROOT=/path/to/moodle/code' (substituting the correct path, obviously) and 'export MOODLE_DOCKER_DB=mysql'. You can double-check these variables are set properly by echo-ing them in the shell.
 2. Next, try running 'sudo -E bin/moodle-docker-compose down' to stop and remove the containers. Then, run 'sudo -E bin/moodle-docker-compose up --build' to rebuild the docker images and bring the containers up again. If you did not have to run the setup script with sudo, you don't have to use it here, either.
 3. If the above two steps did not fix your issue, try the nuclear option. Run './purge.sh [--volumes] [--images] [--untagged] [--all]' By default, the purge script only removes the containers, but with the additional flags, it will remove the volumes and images (along with untagged images). Running the script with the '--volumes' option will remove your database, and you will have to reinstall it with the setup script. If you do this with all the options ('./purge.sh --all), you will have to run the setup script again and it will install everything from scratch, which will take a long time, so only do this if nothing else has worked.
-
+4. If you get an error related to checking out a submodule try the following:
+   * If you are on WiFi, make sure you are not using UCLA_WEB, that connection blocks the SSH port.
+   * Try running the update command with --no-recommend-shallow: git submodule update --init --recursive --no-recommend-shallow
 
 ### Companion docker images
 
