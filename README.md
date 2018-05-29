@@ -42,7 +42,8 @@ Note: If you already have the CCLE codebase set up, you can skip step 2 and clon
     * When you go to http://localhost:8000, you should be greeted with the typical CCLE login page, complete with UCLA theme. If you don't see this, something might have gone wrong.
     * PHPMyAdmin is accessible at http://localhost:8001. You shouldn't have to log in, but if it does prompt you for a username and password, the username is 'root' and the password is empty.
     * Mail sent from your dev instance is captured by MailHog. You can view these emails at http://localhost:8000/_/mail.
-5. Download and install the English (United States)(en_us) language pack. Instructions are here: https://ccle.ucla.edu/mod/qanda/view.php?id=897711&mode=entry&hook=5345
+5. You can login using the following accounts: admin/test, instructor/test, student/test
+6. Download and install the English (United States)(en_us) language pack. Instructions are here: https://ccle.ucla.edu/mod/qanda/view.php?id=897711&mode=entry&hook=5345
 
 ### Use after initial setup
 
