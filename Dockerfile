@@ -16,7 +16,7 @@ ADD ./assets/files/etc/freetds.conf ./assets/files/etc/odbc.ini /etc/
 ADD ./assets/files/etc/php.ini /usr/local/etc/php/
 
 RUN apt-get update \
-  && apt-get install unzip git unixODBC-dev libpq-dev -y
+  && apt-get install unzip git unixodbc unixodbc-dev libpq-dev -y
 
 # Found this stuff here: https://github.com/docker-library/php/issues/103
 # This gets rid of ODBC errors at the top of the page in Moodle, but doesn't automatically
