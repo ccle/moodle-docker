@@ -42,8 +42,12 @@ if ! [ -h "$MOODLE_DOCKER_WWWROOT/config.php" ]; then
 else
     echo "Config symlink exists, no need to make a new one"
 fi
-echo "Copying custom moodle-docker config to config_private..."
-cp "$docker/moodle-docker_config_private-dist.php" config_private.php
+if ! [ -h "$MOODLE_DOCKER_WWWROOT/config_private.php" ]; then
+    echo "Copying custom moodle-docker config to config_private..."
+    cp "$docker/moodle-docker_config_private-dist.php" config_private.php
+else
+    echo "Config private exists, no need to make a new one"
+fi
 
 # Submodule update
 echo "Updating moodle submodules..."
@@ -54,7 +58,6 @@ if ! [ -e composer.phar ]; then
     echo "Doing composer install and setup..."
     curl -sS http://getcomposer.org/installer | php
     php composer.phar install
-    php composer.phar install -d theme/uclashared
 else
     echo "Composer set already done; no need to redo"
 fi
