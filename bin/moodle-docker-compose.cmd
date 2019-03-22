@@ -22,7 +22,11 @@ SET DOCKERCOMPOSE=docker-compose -f "%BASEDIR%\base.yml"
 SET DOCKERCOMPOSE=%DOCKERCOMPOSE% -f "%BASEDIR%\service.mail.yml"
 
 IF "%MOODLE_DOCKER_PHP_VERSION%"=="" (
+<<<<<<< HEAD
     SET MOODLE_DOCKER_PHP_VERSION=7.2
+=======
+    SET MOODLE_DOCKER_PHP_VERSION=7.2-stretch
+>>>>>>> CCLE-8216 - Upgrade Docker dev instance to use PHP 7.2
 )
 
 IF NOT "%MOODLE_DOCKER_DB%"=="pgsql" (
