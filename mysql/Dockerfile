@@ -1,4 +1,4 @@
-FROM mariadb:10
+FROM mariadb:10.2
 
 MAINTAINER williamjlee1@gmail.com
 
