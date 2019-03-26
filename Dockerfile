@@ -1,11 +1,14 @@
-FROM moodlehq/moodle-php-apache:7.0
+FROM moodlehq/moodle-php-apache:7.2
 
 MAINTAINER amit.mondal2016@gmail.com
 
-# Install mcrypt to get rid of those pesky mcrypt constant
-# not defined errors (not sure how much we really need this though)
+# Install mcrypt
 
-RUN docker-php-ext-install mcrypt
+# For PHP <7.2, uncomment the following line and comment out the next following lines.
+#RUN docker-php-ext-install mcrypt
+RUN apt-get update && apt-get install -y libmcrypt-dev \
+    && pecl install mcrypt-1.0.2 \
+    && docker-php-ext-enable mcrypt
 
 # Add config files for registrar connection
 
