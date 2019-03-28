@@ -36,13 +36,13 @@ cd $MOODLE_DOCKER_WWWROOT
 
 echo "Setting up moodle config files..."
 # Set up config files
-if ! [ -h "$MOODLE_DOCKER_WWWROOT/config.php" ]; then
+if ! [ -L "config.php" ]; then
     echo "Config symlink does not exist, making it for the first time..."
     ln -s local/ucla/config/shared_dev_moodle-config.php config.php
 else
     echo "Config symlink exists, no need to make a new one"
 fi
-if ! [ -h "$MOODLE_DOCKER_WWWROOT/config_private.php" ]; then
+if ! [ -f "config_private.php" ]; then
     echo "Copying custom moodle-docker config to config_private..."
     cp "$docker/moodle-docker_config_private-dist.php" config_private.php
 else
