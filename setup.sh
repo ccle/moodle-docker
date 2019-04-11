@@ -12,7 +12,7 @@ export MOODLE_DOCKER_DB=mariadb
 
 if ! [ -e assets/mysql/new_moodle_instance.sql ]; then    
     echo "Downloading SQL file to create new moodle instance DB..."
-    curl -L https://test.ccle.ucla.edu/vagrant/new_moodle_instance.sql > assets/mysql/new_moodle_instance.sql
+    curl -L https://test.ccle.ucla.edu/vagrant/new_moodle_instance.sql -o assets/mysql/new_moodle_instance.sql --create-dirs
 else
     echo "Initial SQL file already exists; no need to download it"
 fi
