@@ -4,9 +4,11 @@ MAINTAINER amit.mondal2016@gmail.com
 
 # Install mcrypt
 
+# apt-get update is run twice to prevent potential timing issues
+# https://github.com/hashicorp/terraform/issues/1025#issuecomment-137270659
 # For PHP <7.2, uncomment the following line and comment out the next following lines.
 #RUN docker-php-ext-install mcrypt
-RUN apt-get update && apt-get install -y libmcrypt-dev \
+RUN (apt-get update || apt-get update) && apt-get install -y libmcrypt-dev \
     && pecl install -f mcrypt-1.0.2 \
     && docker-php-ext-enable mcrypt
 
