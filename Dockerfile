@@ -1,6 +1,4 @@
-FROM moodlehq/moodle-php-apache:7.2
-
-MAINTAINER amit.mondal2016@gmail.com
+FROM moodlehq/moodle-php-apache:7.3
 
 # Install mcrypt
 
@@ -9,7 +7,7 @@ MAINTAINER amit.mondal2016@gmail.com
 # For PHP <7.2, uncomment the following line and comment out the next following lines.
 #RUN docker-php-ext-install mcrypt
 RUN (apt-get update || apt-get update) && apt-get install -y libmcrypt-dev \
-    && pecl install -f mcrypt-1.0.2 \
+    && pecl install -f mcrypt-1.0.3 \
     && docker-php-ext-enable mcrypt
 
 # Add config files for registrar connection
@@ -21,7 +19,7 @@ ADD ./assets/files/etc/freetds.conf ./assets/files/etc/odbc.ini /etc/
 ADD ./assets/files/etc/php.ini /usr/local/etc/php/
 
 RUN apt-get update \
-  && apt-get install unzip git unixodbc unixodbc-dev libpq-dev -y
+    && apt-get install unzip git unixodbc unixodbc-dev libpq-dev -y
 
 # Found this stuff here: https://github.com/docker-library/php/issues/103
 # This gets rid of ODBC errors at the top of the page in Moodle, but doesn't automatically
@@ -57,3 +55,6 @@ RUN odbcinst -i -d -f /etc/odbcinst.ini
 
 # CCLE-7039 - Automate downloading of course email templates to build courses
 ADD ./assets/ccle_email_templates /tmp/ccle_email_templates
+
+# Install Exif, required by media gallery.
+RUN docker-php-ext-install exif

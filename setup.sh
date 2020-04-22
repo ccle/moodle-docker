@@ -2,20 +2,15 @@
 if ! [[ -d "$1" ]]; then
     echo "Error: The first argument must be the path to your moodle code. '$1' is not a directory"
     exit 1
-fi    
+fi
 
 # Set up environmental vars
 export MOODLE_DOCKER_WWWROOT=$1
 export MOODLE_DOCKER_DB=mariadb
 
 # Download the initial sql file
-
-if ! [ -e assets/mysql/new_moodle_instance.sql ]; then    
-    echo "Downloading SQL file to create new moodle instance DB..."
-    curl -L https://test.ccle.ucla.edu/vagrant/new_moodle_instance.sql -o assets/mysql/new_moodle_instance.sql --create-dirs
-else
-    echo "Initial SQL file already exists; no need to download it"
-fi
+echo "Downloading SQL file to create new moodle instance DB..."
+curl -L https://test.ccle.ucla.edu/vagrant/new_moodle_instance.sql -o assets/mysql/schema.sql --create-dirs
 
 # Save docker dir
 docker=$(pwd)

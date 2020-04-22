@@ -1,7 +1,8 @@
-<?php
+<?php  // Moodle configuration file
 
-// This should be the config_private if you're using moodle-docker for CCLE
-// Copied from config.docker-template.php.
+unset($CFG);
+global $CFG;
+$CFG = new stdClass();
 
 $CFG->dbtype    = getenv('MOODLE_DOCKER_DBTYPE');
 $CFG->dblibrary = 'native';
@@ -9,7 +10,7 @@ $CFG->dbhost    = 'db';
 $CFG->dbname    = getenv('MOODLE_DOCKER_DBNAME');
 $CFG->dbuser    = getenv('MOODLE_DOCKER_DBUSER');
 $CFG->dbpass    = getenv('MOODLE_DOCKER_DBPASS');
-$CFG->prefix    = 'mdl_';
+$CFG->prefix    = 'm_';
 $CFG->dboptions = ['dbcollation' => getenv('MOODLE_DOCKER_DBCOLLATION')];
 
 $host = 'localhost';
@@ -87,16 +88,3 @@ if (getenv('MOODLE_DOCKER_PHPUNIT_EXTRAS')) {
 }
 
 require_once(__DIR__ . '/lib/setup.php');
-
-// Default salt to use if you are using the sample database dump at
-// https://test.ccle.ucla.edu/vagrant/new_moodle_instance.sql
-$CFG->passwordsaltmain = 'a_very_long_salt_string';
-
-$CFG->forced_plugin_settings['tool_uclacoursecreator']['email_template_dir'] = '/tmp/ccle_email_templates/course_creator';
-
-// Registrar
-$CFG->registrar_dbtype = 'odbc_mssql';
-$CFG->registrar_dbhost = '';
-$CFG->registrar_dbuser = '';
-$CFG->registrar_dbpass = '';
-$CFG->registrar_dbname = '';

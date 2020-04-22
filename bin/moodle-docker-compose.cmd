@@ -1,5 +1,16 @@
 @ECHO OFF
 
+REM START UCLA MOD: Set some default values.
+REM Default Selenium on port 5900.
+IF "%MOODLE_DOCKER_SELENIUM_VNC_PORT%"=="" (
+    SET MOODLE_DOCKER_SELENIUM_VNC_PORT=5900
+)
+REM Default to using PHP 7.3.
+IF "%MOODLE_DOCKER_PHP_VERSION%"=="" (
+    SET MOODLE_DOCKER_PHP_VERSION=7.3
+)
+REM END UCLA MOD.
+
 IF NOT EXIST "%MOODLE_DOCKER_WWWROOT%" (
     ECHO Error: MOODLE_DOCKER_WWWROOT is not set or not an existing directory
     EXIT /B 1

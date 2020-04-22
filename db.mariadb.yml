@@ -5,23 +5,22 @@ services:
       MOODLE_DOCKER_DBTYPE: mariadb
       MOODLE_DOCKER_DBCOLLATION: utf8mb4_unicode_ci
   db:
-    image: mariadb:10.2
+    image: mariadb:10.2.31
     container_name: moodledocker_db_1
     volumes:
-      - ./assets/mysql/new_moodle_instance.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+      - ./assets/mysql:/docker-entrypoint-initdb.d:ro
       - data:/var/lib/mysql
     command: >
       --character-set-server=utf8mb4
       --collation-server=utf8mb4_bin
-      --innodb_file_format=barracuda
       --innodb_file_per_table=On
       --innodb_large_prefix=On
+      --max_allowed_packet=512M
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_USER: moodle
       MYSQL_PASSWORD: "m@0dl3ing"
       MYSQL_DATABASE: moodle
-    build: ./mysql/
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: moodledocker_phpmyadmin_1

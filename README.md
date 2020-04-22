@@ -1,6 +1,6 @@
 # moodle-docker for CCLE
 
-[![Build Status](https://travis-ci.org/ccle/moodle-docker.svg?branch=ucla)](https://travis-ci.org/ccle/moodle-docker/branches)
+[![Build Status](https://travis-ci.com/ccle/moodle-docker.svg?branch=ucla)](https://travis-ci.com/ccle/moodle-docker/branches)
 
 So you want to get CCLE up and running locally? Well, you've come to the right place. This repository contains a Docker config aimed at
 CCLE developers to easily deploy a testing environment for CCLE
@@ -31,7 +31,6 @@ Note: If you already have the CCLE codebase set up, you can skip step 2 and clon
    - mkdir ~/Projects && cd ~/Projects
    - git clone git@github.com:ccle/moodle-docker.git ccle
    - cd ~/Projects/ccle
-   - git checkout ucla
 2. Check out CCLE the codebase from Github
    - cd ~/Projects/ccle
    - git clone git@github.com:ucla/moodle.git
