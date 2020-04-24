@@ -86,8 +86,6 @@ if (getenv('MOODLE_DOCKER_PHPUNIT_EXTRAS')) {
     define('TEST_ENROL_LDAP_DOMAIN', 'ou=Users,dc=openstack,dc=org');
 }
 
-require_once(__DIR__ . '/lib/setup.php');
-
 // Default salt to use if you are using the sample database dump at
 // https://test.ccle.ucla.edu/vagrant/new_moodle_instance.sql
 $CFG->passwordsaltmain = 'a_very_long_salt_string';
