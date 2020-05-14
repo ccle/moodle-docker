@@ -33,7 +33,7 @@ for i in ${containers[*]}; do
     sudo docker rm $rmflag $i
 done
 
-imagenames=("moodlehq/moodle-php-apache:7.0" "phpmyadmin/phpmyadmin" "mysql:5" "mailhog/mailhog" "selenium/standalone-firefox:2.53.1")
+imagenames=("moodlehq/moodle-php-apache:7.2" "phpmyadmin/phpmyadmin" "mariadb:10.2" "mailhog/mailhog" "selenium/standalone-firefox:2.53.1")
 # Delete the relevant images
 if [ "$images" = true ]; then
     for i in ${imagenames[*]}; do
@@ -48,14 +48,14 @@ fi
 
 # Delete the main volume
 if [ "$volumes" = true ]; then
-    sudo docker volume rm moodledocker_data
+    sudo docker volume rm moodle-docker_data
 fi
 
 # Show that everything has been removed
 echo "Showing containers (sudo docker ps -a)..."
 sudo docker ps -a
 if [ "$images" = true ]; then
-    echo "Showing images (sudo docker images -a)..."    
+    echo "Showing images (sudo docker images -a)..."
     sudo docker images -a
 fi
 if [ "$volumes" = true ]; then
