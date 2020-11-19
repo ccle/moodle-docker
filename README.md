@@ -23,6 +23,12 @@ CCLE developers to easily deploy a testing environment for CCLE
 - Access to the CCLE codebase.
   - Make sure you are using SSH keys to access to the CCLE codebase: https://help.github.com/articles/generating-ssh-keys
 
+### Additional Steps for Windows Users
+If you're working on CCLE from a Windows machine, you may experience subpar performance running Docker containers. Windows Subsystem for Linux (WSL) is a way to use a Linux file system for improved performance and compatability while still developing in a Windows IDE.
+
+- [Using Docker in WSL 2](https://docs.docker.com/docker-for-windows/wsl/) outlines and provides resources on getting set up
+- Also, [php](https://www.php.net/manual/en/install.unix.debian.php) may need to be installed on your Linux distribution (e.g. Ubuntu) 
+
 ### Download and set up environment
 
 Note: If you already have the CCLE codebase set up, you can skip step 2 and clone moodle-docker wherever you want.
