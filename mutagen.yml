@@ -1,0 +1,30 @@
+sync:
+  defaults:
+    mode: "two-way-resolved"
+    flushOnCreate: true
+    ignore:
+      vcs: true
+  php-example-src:
+    alpha: "moodle"
+    beta: "docker://moodledocker_webserver_1/var/www/html"
+    ignore:
+      paths:
+        - "node_modules"
+
+# Set up the service and any volumes before creating sessions.
+beforeCreate:
+  - docker-compose -f base.yml -f service.mail.yml -f db.mariadb.yml -f selenium.debug.yml -f phpunit-external-services.yml -f webserver.port.yml up --detach
+
+# Set up the main services after creating sessions. At this point, sessions will
+# have been established and code pushed to the shared volume.
+# After this is done, we can start up the deployment scripts.
+afterCreate:
+  - docker-compose -f base.yml -f service.mail.yml -f db.mariadb.yml -f selenium.debug.yml -f phpunit-external-services.yml -f webserver.port.yml up --detach
+
+# Tear down all services and remove the code volume after terminating sessions.
+afterTerminate:
+  - docker-compose -f base.yml -f service.mail.yml -f db.mariadb.yml -f selenium.debug.yml -f phpunit-external-services.yml -f webserver.port.yml down --remove-orphans || true
+
+# Define common utility commands.
+commands:
+  logs: docker-compose -f base.yml -f service.mail.yml -f db.mariadb.yml -f selenium.debug.yml -f phpunit-external-services.yml -f webserver.port.yml logs --follow
