@@ -5,8 +5,7 @@ services:
       MOODLE_DOCKER_DBTYPE: mariadb
       MOODLE_DOCKER_DBCOLLATION: utf8mb4_bin
   db:
-    image: mariadb:10.2.31
-    container_name: moodledocker_db_1
+    image: mariadb:10.2
     volumes:
       - ./assets/mysql:/docker-entrypoint-initdb.d:ro
       - data:/var/lib/mysql
@@ -14,6 +13,7 @@ services:
       --character-set-server=utf8mb4
       --collation-server=utf8mb4_bin
       --innodb_file_per_table=On
+      --wait-timeout=28800
       --innodb_large_prefix=On
       --max_allowed_packet=512M
     environment:

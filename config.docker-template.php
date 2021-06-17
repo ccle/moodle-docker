@@ -31,6 +31,7 @@ $CFG->dataroot  = '/var/www/moodledata';
 $CFG->admin     = 'admin';
 $CFG->directorypermissions = 0777;
 $CFG->smtphosts = 'mailhog:1025';
+$CFG->noreplyaddress = 'noreply@example.com';
 
 // Debug options - possible to be controlled by flag in future..
 $CFG->debug = (E_ALL | E_STRICT); // DEBUG_DEVELOPER
@@ -40,6 +41,8 @@ $CFG->perfdebug = 15;
 $CFG->debugpageinfo = 1;
 $CFG->allowthemechangeonurl = 1;
 $CFG->passwordpolicy = 0;
+$CFG->cronclionly = 0;
+$CFG->pathtophp = '/usr/local/bin/php';
 
 $CFG->phpunit_dataroot  = '/var/www/phpunitdata';
 $CFG->phpunit_prefix = 't_';
@@ -57,6 +60,10 @@ $CFG->behat_profiles = array(
 $CFG->behat_faildump_path = '/var/www/behatfaildumps';
 
 define('PHPUNIT_LONGTEST', true);
+
+if (getenv('MOODLE_DOCKER_APP')) {
+    $CFG->behat_ionic_wwwroot = 'http://moodleapp:8100';
+}
 
 if (getenv('MOODLE_DOCKER_PHPUNIT_EXTRAS')) {
     define('TEST_SEARCH_SOLR_HOSTNAME', 'solr');

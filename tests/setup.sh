@@ -2,6 +2,14 @@
 set -e
 basedir="$( cd "$( dirname "${BASH_SOURCE[0]}" )/../" && pwd )"
 
+# Log in dockerhub if possible (to avoid pull limits for unauthenticated uses).
+if [ -n "$DOCKER_USER" ] && [ -n "$DOCKER_TOKEN" ]; then
+    echo "$DOCKER_TOKEN" | docker login -u "$DOCKER_USER" --password-stdin
+    echo "Using authenticated connection (no pull limits)"
+else
+    echo "Using unauthenticated docker (pull limits may apply). Setup DOCKER_USER and DOCKER_TOKEN if needed."
+fi
+
 if [ "$SUITE" = "phpunit" ];
 then
     initcmd="bin/moodle-docker-compose exec -T webserver php admin/tool/phpunit/cli/init.php"
@@ -12,6 +20,20 @@ elif [ "$SUITE" = "phpunit-full" ];
 then
     export MOODLE_DOCKER_PHPUNIT_EXTERNAL_SERVICES=true
     initcmd="bin/moodle-docker-compose exec -T webserver php admin/tool/phpunit/cli/init.php"
+elif [ "$SUITE" = "behat-app-development" ];
+then
+    git clone --branch "v$APP_VERSION" --depth 1 git://github.com/moodlehq/moodleapp $HOME/app
+    git clone --branch "v$APP_VERSION" --depth 1 git://github.com/moodlehq/moodle-local_moodlemobileapp $HOME/moodle/local/moodlemobileapp
+
+    docker run --volume $HOME/app:/app --workdir /app node:11 npm run setup
+    docker run --volume $HOME/app:/app --workdir /app node:11 npm ci
+
+    initcmd="bin/moodle-docker-compose exec -T webserver php admin/tool/behat/cli/init.php"
+elif [ "$SUITE" = "behat-app" ];
+then
+    git clone --branch "v$APP_VERSION" --depth 1 git://github.com/moodlehq/moodle-local_moodlemobileapp $HOME/moodle/local/moodlemobileapp
+
+    initcmd="bin/moodle-docker-compose exec -T webserver php admin/tool/behat/cli/init.php"
 else
     echo "Error, unknown suite '$SUITE'"
     exit 1
@@ -23,5 +45,7 @@ echo "Starting up container"
 $basedir/bin/moodle-docker-compose up -d
 echo "Waiting for DB to come up"
 $basedir/bin/moodle-docker-wait-for-db
+echo "Waiting for Moodle app to come up"
+$basedir/bin/moodle-docker-wait-for-app
 echo "Running: $initcmd"
 $basedir/$initcmd
