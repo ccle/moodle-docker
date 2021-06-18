@@ -7,6 +7,7 @@ fi
 # Set up environmental vars
 export MOODLE_DOCKER_WWWROOT=$1
 export MOODLE_DOCKER_DB=mariadb
+export COMPOSE_PROJECT_NAME=ccle
 
 # Download the initial sql file
 echo "Downloading SQL file to create new moodle instance DB..."

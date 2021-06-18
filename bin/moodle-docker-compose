@@ -4,8 +4,10 @@ set -e
 # START UCLA MOD: Set some default values.
 # Default Selenium on port 5900.
 export MOODLE_DOCKER_SELENIUM_VNC_PORT=${MOODLE_DOCKER_SELENIUM_VNC_PORT:-5900}
-# Default to using PHP 7.3.
-export MOODLE_DOCKER_PHP_VERSION=${MOODLE_DOCKER_PHP_VERSION:-7.3}
+# Default to using PHP 7.4.
+export MOODLE_DOCKER_PHP_VERSION=${MOODLE_DOCKER_PHP_VERSION:-7.4}
+# Default to prefixing containers with ccle.
+export COMPOSE_PROJECT_NAME=${COMPOSE_PROJECT_NAME:-ccle}
 # END UCLA MOD.
 
 if [ ! -d "$MOODLE_DOCKER_WWWROOT" ];

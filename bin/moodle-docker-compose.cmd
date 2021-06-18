@@ -5,9 +5,13 @@ REM Default Selenium on port 5900.
 IF "%MOODLE_DOCKER_SELENIUM_VNC_PORT%"=="" (
     SET MOODLE_DOCKER_SELENIUM_VNC_PORT=5900
 )
-REM Default to using PHP 7.3.
+REM Default to using PHP 7.4.
 IF "%MOODLE_DOCKER_PHP_VERSION%"=="" (
-    SET MOODLE_DOCKER_PHP_VERSION=7.3
+    SET MOODLE_DOCKER_PHP_VERSION=7.4
+)
+REM Default to prefixing containers with ccle.
+IF "%COMPOSE_PROJECT_NAME%"=="" (
+    SET COMPOSE_PROJECT_NAME=ccle
 )
 REM END UCLA MOD.
 

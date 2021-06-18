@@ -1,4 +1,4 @@
-FROM moodlehq/moodle-php-apache:7.3
+FROM moodlehq/moodle-php-apache:7.4
 
 # Install mcrypt
 

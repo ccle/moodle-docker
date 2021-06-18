@@ -23,7 +23,6 @@ services:
       MYSQL_DATABASE: moodle
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: moodledocker_phpmyadmin_1
     environment:
       - PMA_ARBITRARY=1
       - PMA_USER=root
